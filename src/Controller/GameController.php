@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\Tc\Crud\CrudInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +17,7 @@ use App\Entity\Game;
 /**
  * @Route("/games")
  */
-class GameController extends AbstractController{
+class GameController extends AbstractController implements CrudInterface{
     
     private $entityManager;
     private $serializer;
