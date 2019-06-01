@@ -6,11 +6,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\DBAL\DBALException;
-use App\Service\ModelFactory;
+use App\Service\EntityFactory;
 use App\Repository\GameRepository;
-use App\Model\Game;
+use App\Entity\Game;
 
 /**
  * @Route("/games")
@@ -58,10 +59,10 @@ class GameController extends AbstractController{
     /**
      * @Route("/create", name="game_create", methods="PUT")
      */
-    public function create(Request $request, ModelFactory $modelFactory): ?JsonResponse 
+    public function create(Request $request, EntityFactory $entityFactory): ?JsonResponse 
     {
-        $game = $modelFactory->bind($request, Game::class)
-                             ->create();
+        $game = $entityFactory->bind($request, Game::class)
+                              ->create();
         try {
             $this->entityManager->persist($game);
             $this->entityManager->flush();
@@ -94,8 +95,6 @@ class GameController extends AbstractController{
             throw $e;
         }
 
-        return new JsonResponse([
-            'message' => "Removed successfully from the preferred list."
-        ], Response::HTTP_OK);
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 }
