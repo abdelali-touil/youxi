@@ -17,7 +17,7 @@ use App\Entity\Game;
 /**
  * @Route("/games")
  */
-class GameController extends AbstractController implements CrudInterface{
+class GameController extends AbstractController {
     
     private $entityManager;
     private $serializer;
@@ -29,12 +29,12 @@ class GameController extends AbstractController implements CrudInterface{
     }
 
     /**
-     * @Route("/", name="games_list", methods="GET")
+     * @Route("/{isArchived}", name="games_list", methods="GET", defaults={"isArchived": false})
      */
-    public function index(GameRepository $gameRepository): ?JsonResponse 
+    public function index(Boolean $isArchived, GameRepository $gameRepository): ?JsonResponse 
     {
         $games = $gameRepository->findBy([
-            'isArchived' => false
+            'isArchived' => (bool) $isArchived
         ], [
             'name' => 'ASC'
         ]);

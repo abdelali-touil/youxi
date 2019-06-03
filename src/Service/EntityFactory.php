@@ -3,8 +3,10 @@ namespace App\Service;
 
 class EntityFactory {
 
-    
+
     public function bind(Request $request, Object $entity): EntityFactory {
+
+        
 
 
         return $this;
