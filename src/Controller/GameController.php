@@ -29,7 +29,7 @@ class GameController extends AbstractController {
     }
 
     /**
-     * @Route("/{isArchived}", name="games_list", methods="GET", defaults={"isArchived": false})
+     * @Route("/{isArchived}", methods="GET", defaults={"isArchived": false})
      */
     public function index(Boolean $isArchived, GameRepository $gameRepository): ?JsonResponse 
     {
@@ -46,7 +46,7 @@ class GameController extends AbstractController {
     }
 
     /**
-     * @Route("/{id}", name="game_show", methods="GET")
+     * @Route("/{id}", methods="GET")
      */
     public function show(Game $game): ?JsonResponse 
     {
@@ -58,7 +58,7 @@ class GameController extends AbstractController {
     }
     
     /**
-     * @Route("/create", name="game_create", methods="PUT")
+     * @Route("/create", methods="PUT")
      */
     public function create(Request $request, EntityFactory $entityFactory): ?JsonResponse 
     {
@@ -78,13 +78,29 @@ class GameController extends AbstractController {
         ], Response::HTTP_OK);
     }
 
-    public function update(): ?JsonResponse 
-    {
-
-    }
-
     /**
-     * @Route("/delete/{id}", name="game_delete", methods="DELETE")
+     * @Route("/update/{id}", methods="POST")
+     */
+    public function update(Request $request, Game $game): ?JsonResponse 
+    {
+        $game = $entityFactory->bind($request, $game)
+                              ->update();
+        try {
+                $this->entityManager->persist($game);
+                $this->entityManager->flush();
+
+        } catch (DBALException $e) {
+            throw $e;
+        }
+        $jsonContent = $this->serializer->serialize($game, 'json');
+
+        return new JsonResponse([
+            'game' => $jsonContent
+        ], Response::HTTP_OK);
+    }
+    
+    /**
+     * @Route("/delete/{id}", methods="DELETE")
      */
     public function delete(Game $game): ?JsonResponse 
     {
