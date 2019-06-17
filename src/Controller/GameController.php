@@ -31,7 +31,7 @@ class GameController extends AbstractController {
     /**
      * @Route("/", methods="GET")
      */
-    public function index(Boolean $isArchived, GameRepository $gameRepository): ?JsonResponse 
+    public function index(GameRepository $gameRepository): ?JsonResponse 
     {
         $games = $gameRepository->findBy([
             'isArchived' => false
