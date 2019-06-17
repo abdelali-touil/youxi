@@ -29,12 +29,12 @@ class GameController extends AbstractController {
     }
 
     /**
-     * @Route("/{isArchived}", methods="GET", defaults={"isArchived": false})
+     * @Route("/", methods="GET")
      */
     public function index(Boolean $isArchived, GameRepository $gameRepository): ?JsonResponse 
     {
         $games = $gameRepository->findBy([
-            'isArchived' => (bool) $isArchived
+            'isArchived' => false
         ], [
             'name' => 'ASC'
         ]);
@@ -58,7 +58,7 @@ class GameController extends AbstractController {
     }
     
     /**
-     * @Route("/create", methods="PUT")
+     * @Route("/", methods="POST")
      */
     public function create(Request $request, EntityFactory $entityFactory): ?JsonResponse 
     {
@@ -79,7 +79,7 @@ class GameController extends AbstractController {
     }
 
     /**
-     * @Route("/update/{id}", methods="POST")
+     * @Route("/{id}", methods="PUT")
      */
     public function update(Request $request, Game $game): ?JsonResponse 
     {
@@ -100,7 +100,7 @@ class GameController extends AbstractController {
     }
     
     /**
-     * @Route("/delete/{id}", methods="DELETE")
+     * @Route("/{id}", methods="DELETE")
      */
     public function delete(Game $game): ?JsonResponse 
     {
