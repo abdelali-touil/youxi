@@ -33,12 +33,12 @@ class GameController extends AbstractController {
      */
     public function index(Request $request, GameRepository $gameRepository): ?JsonResponse 
     {
-        $isArchived = $request->get('isArchived') ? true : false;
+        $archive = $request->get('archive') ? true : false;
         $limit = $request->get('limit') ?: getenv("LIMIT");
         $offset = $request->get('offset') ?: 0;
         
         $games = $gameRepository->findBy([
-            'isArchived' => $isArchived
+            'isArchived' => $archive
         ], [
             'name' => 'ASC'
         ], $limit, $offset);
