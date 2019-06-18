@@ -31,13 +31,16 @@ class GameController extends AbstractController {
     /**
      * @Route("/", methods="GET")
      */
-    public function index(GameRepository $gameRepository): ?JsonResponse 
+    public function index(Request $request, GameRepository $gameRepository): ?JsonResponse 
     {
+        $limit = $request->get('limit') ?: getenv("LIMIT");
+        $offset = $request->get('offset') ?: 0;
+        
         $games = $gameRepository->findBy([
             'isArchived' => false
         ], [
             'name' => 'ASC'
-        ]);
+        ], $limit, $offset);
         $jsonContent = $this->serializer->serialize($games, 'json');
 
         return new JsonResponse([
